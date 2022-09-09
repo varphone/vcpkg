@@ -1,0 +1,4 @@
+Source: vtk
+Version: 9.2.0
+Description: Software system for 3D computer graphics, image processing, and visualization
+Build-Depends: qt5-base 
