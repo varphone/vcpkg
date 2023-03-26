@@ -1,0 +1,10 @@
+The package xtr is compatible with built-in CMake targets via CMake v3.7 and prior syntax
+
+    find_package(xtr REQUIRED)
+    target_link_libraries(main PRIVATE ${XTR_LIBRARIES})
+    target_include_directories(main PRIVATE ${XTR_INCLUDE_DIR})
+
+and the CMake v3.8 and beyond imported target syntax
+
+    find_package(xtr REQUIRED)
+    target_link_libraries(main PRIVATE xtr::xtr)
