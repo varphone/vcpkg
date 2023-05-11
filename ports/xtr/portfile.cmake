@@ -46,9 +46,9 @@ vcpkg_add_to_path("${CARGO_BIN_DIR}")
 #  vcpkg_from_bitbucket
 #  vcpkg_from_sourceforge
 vcpkg_download_distfile(ARCHIVE
-    URLS "https://github.com/varphone/xtr/archive/refs/tags/v0.2.1.zip"
-    FILENAME "xtr-0.2.1.zip"
-    SHA512 c5ae55304f151dfd0f0b6feb6935864324186d9a1418067db365d67d3bd7fd8dc651735fb22ba5536ee72e52184756ecdff8d193cf9ed69e435021e491e3f561
+    URLS "https://github.com/varphone/xtr/archive/refs/tags/v0.3.0-oss.zip"
+    FILENAME "xtr-0.3.0-oss.zip"
+    SHA512 9042ebb6fcde2d4a31a789cf4ba872b3abe4fc6b586a2556582e3321ba44b541715896e95f630796eb5a91442f530e01d0859c2e0a3a82bb0e9d6fd1693af17b
 )
 
 vcpkg_extract_source_archive_ex(
