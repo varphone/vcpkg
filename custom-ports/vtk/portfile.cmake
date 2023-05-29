@@ -36,9 +36,9 @@
 #  vcpkg_from_bitbucket
 #  vcpkg_from_sourceforge
 vcpkg_download_distfile(ARCHIVE
-    URLS "https://github.com/Kitware/VTK/archive/refs/tags/v9.2.5.zip"
-    FILENAME "VTK-9.2.5.zip"
-    SHA512 f69138219b3756bc3cd0ab5cbc4c23ce6bf1ebf7c1a4ef1ea9708c4634f558f47508aeedac8f15c14efc580e9b31ccc708072e15796452d3bcba5bade09bc8b8
+    URLS "https://github.com/Kitware/VTK/archive/refs/tags/v9.2.6.zip"
+    FILENAME "VTK-9.2.6.zip"
+    SHA512 91ec0939ef9652e68f7752c0bd9072ea9103becf2bee572e669f71a296fbe256707c7fedb01ecd38cf3ec3fe2478b7006e394a4bc66a6a2b3c6fcafdc04b0fc8
 )
 
 vcpkg_extract_source_archive_ex(
@@ -87,6 +87,7 @@ vcpkg_cmake_configure(
         -DVTK_USE_TK=OFF # TCL/TK currently not included in vcpkg
         # Select modules / groups to install
         # -DVTK_USE_EXTERNAL:BOOL=ON
+        -DVTK_MODULE_USE_EXTERNAL_VTK_fmt:BOOL=ON
         -DVTK_MODULE_USE_EXTERNAL_VTK_gl2ps:BOOL=OFF # Not yet in VCPKG
         # -DVTK_DEBUG_MODULE_ALL=ON
         # -DVTK_DEBUG_MODULE=ON
