@@ -30,6 +30,7 @@ vcpkg_from_github(
       0019-missing-include.patch
       0020-fix-compat-cuda12.2.patch
       "${ARM64_WINDOWS_FIX}"
+      0019-fix-get-temp-path.patch
 )
 # Disallow accidental build of vendored copies
 file(REMOVE_RECURSE "${SOURCE_PATH}/3rdparty/openexr")
