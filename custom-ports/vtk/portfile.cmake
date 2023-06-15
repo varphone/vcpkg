@@ -48,8 +48,8 @@ vcpkg_extract_source_archive_ex(
     # REF 1.0.0
     # (Optional) Read the docs for how to generate patches at:
     # https://github.com/Microsoft/vcpkg/blob/master/docs/examples/patching.md
-    # PATCHES
-    #   001_port_fixes.patch
+    PATCHES
+        0001-fix-build-with-fmt-v10.patch
     #   002_more_port_fixes.patch
 )
 
