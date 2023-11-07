@@ -46,9 +46,9 @@ vcpkg_add_to_path("${CARGO_BIN_DIR}")
 #  vcpkg_from_bitbucket
 #  vcpkg_from_sourceforge
 vcpkg_download_distfile(ARCHIVE
-    URLS "http://git.full-v.com/fullv/xtr/archive/v0.3.4.zip"
-    FILENAME "xtr-0.3.4.zip"
-    SHA512 38910fa1bab24c04a76a9768afa107288288a72a312372e745ba5effc64b950f345fbbbdc6eb6e47c77ac47e098cc107c5f2ba5e36b3f735a5ba287eb75f4749
+    URLS "http://git.full-v.com/fullv/xtr/archive/v0.4.0+2.zip"
+    FILENAME "xtr-0.4.0+2.zip"
+    SHA512 e1e129c7e8aa93fbbf334ace5049453faab44c9ae9f772e4fbcee253cc9e31dbe1c4a0056753779d8e3c8a7baf25d2f46a1f003cb6e718c2149f772af91b5098
 )
 
 vcpkg_extract_source_archive_ex(
