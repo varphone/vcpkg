@@ -1,9 +1,8 @@
-
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ffmpeg/ffmpeg
-    REF n${VERSION}
-    SHA512 da1b836c8f51cf69f95db750d5da5191a71d534fa7b0f019d6d6454f8dd6db5598789576b4fe5ad983dcd0197b9a7e8f9d43f10707b6d40ac31425da23da35b2
+    REF "n${VERSION}"
+    SHA512 a84209fe36a2a0262ebc34b727e7600b12d4739991a95599d7b4df533791b12e2e43586ccc6ff26aab2f935a3049866204e322ec0c5e49e378fc175ded34e183
     HEAD_REF master
     PATCHES
         0001-create-lib-libraries.patch
@@ -20,7 +19,6 @@ vcpkg_from_github(
         0015-Fix-xml2-detection.patch
         0020-fix-aarch64-libswscale.patch
         0022-fix-iconv.patch
-        0024-fix-gcc13-binutils.patch
 )
 
 if(SOURCE_PATH MATCHES " ")
@@ -33,18 +31,9 @@ if(NOT VCPKG_TARGET_ARCHITECTURE STREQUAL "wasm32")
     vcpkg_add_to_path("${NASM_EXE_PATH}")
 endif()
 
-if(VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_IS_MINGW)
-    #We're assuming that if we're building for Windows we're using MSVC
-    set(INCLUDE_VAR "INCLUDE")
-    set(LIB_PATH_VAR "LIB")
-else()
-    set(INCLUDE_VAR "CPATH")
-    set(LIB_PATH_VAR "LIBRARY_PATH")
-endif()
-
 set(OPTIONS "--enable-pic --disable-doc --enable-debug --enable-runtime-cpudetect --disable-autodetect")
 
-if(VCPKG_TARGET_IS_WINDOWS)
+if(VCPKG_HOST_IS_WINDOWS)
     vcpkg_acquire_msys(MSYS_ROOT PACKAGES automake1.16)
     set(SHELL "${MSYS_ROOT}/usr/bin/bash.exe")
     vcpkg_add_to_path("${MSYS_ROOT}/usr/share/automake-1.16")
@@ -67,9 +56,12 @@ elseif(VCPKG_TARGET_IS_WINDOWS)
     string(APPEND OPTIONS " --target-os=win32 --enable-w32threads --enable-d3d11va --enable-dxva2 --enable-mediafoundation")
 elseif(VCPKG_TARGET_IS_OSX)
     string(APPEND OPTIONS " --target-os=darwin --enable-appkit --enable-avfoundation --enable-coreimage --enable-audiotoolbox --enable-videotoolbox")
+elseif(VCPKG_TARGET_IS_IOS)
+    string(APPEND OPTIONS " --enable-avfoundation --enable-coreimage --enable-videotoolbox")
 elseif(VCPKG_CMAKE_SYSTEM_NAME STREQUAL "Android")
-    string(APPEND OPTIONS " --target-os=android")
-else()
+    string(APPEND OPTIONS " --target-os=android --enable-jni --enable-mediacodec")
+elseif(VCPKG_CMAKE_SYSTEM_NAME STREQUAL "QNX")
+    string(APPEND OPTIONS " --target-os=qnx")
 endif()
 
 if(VCPKG_TARGET_IS_OSX)
@@ -93,8 +85,6 @@ string(APPEND VCPKG_COMBINED_C_FLAGS_DEBUG " -I \"${CURRENT_INSTALLED_DIR}/inclu
 string(APPEND VCPKG_COMBINED_C_FLAGS_RELEASE " -I \"${CURRENT_INSTALLED_DIR}/include\"")
 
 ## Setup vcpkg toolchain
-
-set(ENV_LIB_PATH "$ENV{${LIB_PATH_VAR}}")
 
 set(prog_env "")
 
@@ -410,6 +400,8 @@ else()
         string(APPEND OPTIONS " --enable-schannel")
     elseif(VCPKG_TARGET_IS_OSX)
         string(APPEND OPTIONS " --enable-securetransport")
+    elseif(VCPKG_TARGET_IS_IOS)
+        string(APPEND OPTIONS " --enable-securetransport")
     endif()
 endif()
 
@@ -523,10 +515,10 @@ endif()
 
 if("lite" IN_LIST FEATURES)
     set(LITE_BSFS "extract_extradata,filter_units,h264_metadata,h264_mp4toannexb,h264_redundant_pps,hevc_metadata,hevc_mp4toannexb,null")
-    set(LITE_DECODERS "apng,bmp,h264,h264_crystalhd,h264_cuvid,h264_mediacodec,h264_mmal,h264_qsv,hevc,hevc_cuvid,hevc_mediacodec,hevc_qsv,mjpeg,png,webp,zlib")
-    set(LITE_DEMUXERS "h264,hevc,mjpeg,mp4,webm,webp")
-    set(LITE_ENCODERS "apng,bmp,h264_amf,h264_mf,h264_nvenc,h264_omx,h264_qsv,hevc_amf,hevc_mf,hevc_nvenc,hevc_qsv,libwebp,libx264,libx265,mjpeg,png,zlib")
-    set(LITE_MUXERS "h264,hevc,mp4,webm,webp")
+    set(LITE_DECODERS "apng,bmp,h264,h264_crystalhd,h264_cuvid,h264_mediacodec,h264_mmal,h264_qsv,hevc,hevc_cuvid,hevc_mediacodec,hevc_qsv,mjpeg,png,text,webp,zlib")
+    set(LITE_DEMUXERS "h264,hevc,matroska,mjpeg,mov,webm_dash_manifest")
+    set(LITE_ENCODERS "apng,bmp,h264_amf,h264_mf,h264_nvenc,h264_omx,h264_qsv,hevc_amf,hevc_mf,hevc_nvenc,hevc_qsv,libwebp,libx264,libx265,mjpeg,png,text,zlib")
+    set(LITE_MUXERS "avif,f4v,h264,hevc,ismv,matroska,mov,mp4,webm,webm_chunk,webm_dash_manifest,webp")
     set(LITE_PARSERS "h264,hevc")
     set(LITE_PROTOCOLS "async,cache,concat,data,file,md5,pipe,subfile,tcp,tee,udp")
     set(OPTIONS "${OPTIONS} --disable-everything")
@@ -534,11 +526,12 @@ if("lite" IN_LIST FEATURES)
     set(OPTIONS "${OPTIONS} --enable-decoder=${LITE_DECODERS}")
     set(OPTIONS "${OPTIONS} --enable-demuxer=${LITE_DEMUXERS}")
     set(OPTIONS "${OPTIONS} --enable-encoder=${LITE_ENCODERS}")
-    set(OPTIONS "${OPTIONS} --enable-muxer=${LITE_DEMUXERS}")
+    set(OPTIONS "${OPTIONS} --enable-muxer=${LITE_MUXERS}")
     set(OPTIONS "${OPTIONS} --enable-parser=${LITE_PARSERS}")
     set(OPTIONS "${OPTIONS} --enable-protocol=${LITE_PROTOCOLS}")
     set(OPTIONS "${OPTIONS} --enable-filter=deflate")
     set(OPTIONS "${OPTIONS} --enable-filter=inflate")
+    set(OPTIONS "${OPTIONS} --enable-hwaccel=av1_d3d11va,av1_d3d11va2,av1_d3d12va,av1_nvdec,av1_vulkan,h264_d3d11va,h264_d3d11va2,h264_d3d12va,h264_dxva2,h264_nvdec,h264_vulkan,hevc_d3d11va,hevc_d3d11va2,hevc_d3d12va,hevc_dxva2,hevc_nvdec,hevc_vulkan,vp8_nvdec,vp9_d3d11va,vp9_d3d11va2,vp9_d3d12va,vp9_dxva2,vp9_nvdec")
 endif()
 
 set(OPTIONS_CROSS " --enable-cross-compile")
@@ -594,8 +587,12 @@ message(STATUS "Building Options: ${OPTIONS}")
 
 # Release build
 if (NOT VCPKG_BUILD_TYPE OR VCPKG_BUILD_TYPE STREQUAL "release")
+    if (VCPKG_DETECTED_MSVC)
+        set(OPTIONS_RELEASE "${OPTIONS_RELEASE} --extra-ldflags=-libpath:\"${CURRENT_INSTALLED_DIR}/lib\"")
+    else()
+        set(OPTIONS_RELEASE "${OPTIONS_RELEASE} --extra-ldflags=-L\"${CURRENT_INSTALLED_DIR}/lib\"")
+    endif()
     message(STATUS "Building Release Options: ${OPTIONS_RELEASE}")
-    set(ENV{${LIB_PATH_VAR}} "${CURRENT_INSTALLED_DIR}/lib${VCPKG_HOST_PATH_SEPARATOR}${ENV_LIB_PATH}")
     set(ENV{PKG_CONFIG_PATH} "${CURRENT_INSTALLED_DIR}/lib/pkgconfig")
     message(STATUS "Building ${PORT} for Release")
     file(MAKE_DIRECTORY "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel")
@@ -631,8 +628,12 @@ endif()
 
 # Debug build
 if (NOT VCPKG_BUILD_TYPE OR VCPKG_BUILD_TYPE STREQUAL "debug")
+    if (VCPKG_DETECTED_MSVC)
+        set(OPTIONS_DEBUG "${OPTIONS_DEBUG} --extra-ldflags=-libpath:\"${CURRENT_INSTALLED_DIR}/debug/lib\"")
+    else()
+        set(OPTIONS_DEBUG "${OPTIONS_DEBUG} --extra-ldflags=-L\"${CURRENT_INSTALLED_DIR}/debug/lib\"")
+    endif()
     message(STATUS "Building Debug Options: ${OPTIONS_DEBUG}")
-    set(ENV{${LIB_PATH_VAR}} "${CURRENT_INSTALLED_DIR}/debug/lib${VCPKG_HOST_PATH_SEPARATOR}${ENV_LIB_PATH}")
     set(ENV{LDFLAGS} "${VCPKG_COMBINED_SHARED_LINKER_FLAGS_DEBUG}")
     set(ENV{PKG_CONFIG_PATH} "${CURRENT_INSTALLED_DIR}/debug/lib/pkgconfig")
     message(STATUS "Building ${PORT} for Debug")
