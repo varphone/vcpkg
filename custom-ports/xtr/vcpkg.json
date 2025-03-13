@@ -1,6 +1,6 @@
 {
   "name": "xtr",
-  "version": "1.1.5",
+  "version": "1.1.5-p1",
   "homepage": "https://github.com/varphone/xtr",
   "description": "Highly scalable transport protocol framework",
   "dependencies": [
