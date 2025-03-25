@@ -36,9 +36,9 @@
 #  vcpkg_from_bitbucket
 #  vcpkg_from_sourceforge
 vcpkg_download_distfile(ARCHIVE
-    URLS "https://github.com/Kitware/VTK/archive/refs/tags/v9.2.6.zip"
-    FILENAME "VTK-9.2.6.zip"
-    SHA512 91ec0939ef9652e68f7752c0bd9072ea9103becf2bee572e669f71a296fbe256707c7fedb01ecd38cf3ec3fe2478b7006e394a4bc66a6a2b3c6fcafdc04b0fc8
+    URLS "https://github.com/Kitware/VTK/archive/refs/tags/v9.4.1.zip"
+    FILENAME "VTK-9.4.1.zip"
+    SHA512 e55872fe8e2196b5376d41e3cfeb0b29da04541cc11aae82e21e66d70fb8b47edeb0045a8d77425d7f378a07b29a337b543b05658c6fa31994ea3e8f4f54d5d3
 )
 
 vcpkg_extract_source_archive_ex(
@@ -49,8 +49,7 @@ vcpkg_extract_source_archive_ex(
     # (Optional) Read the docs for how to generate patches at:
     # https://github.com/Microsoft/vcpkg/blob/master/docs/examples/patching.md
     PATCHES
-        0001-fix-build-with-fmt-v10.patch
-    #   002_more_port_fixes.patch
+        0001-fix-build-with-fmt-v10-v11.patch
 )
 
 # # Check if one or more features are a part of a package installation.
@@ -113,7 +112,7 @@ vcpkg_copy_pdbs()
 
 # =============================================================================
 # Fixup target files
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/vtk-9.2)
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/vtk-9.4)
 
 # =============================================================================
 # Clean-up other directories
@@ -155,7 +154,7 @@ function(_vtk_move_release_tool TOOL_NAME)
     endif()
 endfunction()
 
-set(VTK_SHORT_VERSION 9.2)
+set(VTK_SHORT_VERSION 9.4)
 set(VTK_TOOLS
     vtkEncodeString-${VTK_SHORT_VERSION}
     vtkHashSource-${VTK_SHORT_VERSION}
