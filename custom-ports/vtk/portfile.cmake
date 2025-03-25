@@ -164,6 +164,7 @@ set(VTK_TOOLS
     vtkWrapPython-${VTK_SHORT_VERSION}
     vtkWrapJava-${VTK_SHORT_VERSION}
     vtkWrapHierarchy-${VTK_SHORT_VERSION}
+    vtkWrapSerDes-${VTK_SHORT_VERSION}
     vtkParseJava-${VTK_SHORT_VERSION}
     vtkParseOGLExt-${VTK_SHORT_VERSION}
     vtkProbeOpenGLVersion-${VTK_SHORT_VERSION}
