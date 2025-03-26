@@ -89,6 +89,7 @@ vcpkg_cmake_configure(
         -DVTK_MODULE_USE_EXTERNAL_VTK_fmt:BOOL=ON
         -DVTK_MODULE_USE_EXTERNAL_VTK_freetype:BOOL=ON
         -DVTK_MODULE_USE_EXTERNAL_VTK_gl2ps:BOOL=OFF # Not yet in VCPKG
+        -DVTK_MODULE_USE_EXTERNAL_VTK_tiff:BOOL=ON
         # -DVTK_DEBUG_MODULE_ALL=ON
         # -DVTK_DEBUG_MODULE=ON
 )
