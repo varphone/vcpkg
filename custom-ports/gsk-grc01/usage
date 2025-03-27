@@ -1,0 +1,18 @@
+The package gsk-grc01 is compatible with built-in CMake targets via CMake v3.7 and prior syntax
+
+    find_package(gsk-grc01 REQUIRED)
+    target_link_libraries(main PRIVATE ${GSK_GRC01_LIBRARIES})
+    target_include_directories(main PRIVATE ${GSK_GRC01_INCLUDE_DIR})
+
+and the CMake v3.8 and beyond imported target syntax
+
+    find_package(gsk-grc01 REQUIRED)
+    target_link_libraries(main PRIVATE gsk-grc01::GrcComm)
+
+To use the package in your code you need to include the header file:
+
+    ```cpp
+    #include <stdint.h>
+    #include <gsk/grc01/commAddr.h>
+    #include <gsk/grc01/networkmodule.h>
+    ```
