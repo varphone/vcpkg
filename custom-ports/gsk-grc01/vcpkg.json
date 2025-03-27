@@ -1,0 +1,17 @@
+{
+  "name": "gsk-grc01",
+  "version": "1.0.0",
+  "description": "Sofware Deevelopment Kit for GR-C01",
+  "homepage": "http://git.full-v.com/fullv/gsk-grc01.git",
+  "license": "MIT",
+  "dependencies": [
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    },
+    {
+      "name": "vcpkg-cmake-config",
+      "host": true
+    }
+  ]
+}
