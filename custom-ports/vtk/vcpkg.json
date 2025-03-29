@@ -9,6 +9,7 @@
     "double-conversion",
     "eigen3",
     "expat",
+    "fmt",
     "freetype",
     "glew",
     {
