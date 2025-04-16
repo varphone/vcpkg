@@ -52,6 +52,15 @@
         "opengl"
       ]
     },
+    "qt": {
+      "description": "An alias for build with qt6",
+      "dependencies": [
+        {
+          "name": "vtk",
+          "features": ["qt6"]
+        }
+      ]
+    },
     "qt5": {
       "description": "Build with qt5",
       "dependencies": [
