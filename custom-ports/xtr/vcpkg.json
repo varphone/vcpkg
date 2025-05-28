@@ -1,6 +1,6 @@
 {
   "name": "xtr",
-  "version": "1.1.5-p1",
+  "version": "1.1.6",
   "homepage": "https://github.com/varphone/xtr",
   "description": "Highly scalable transport protocol framework",
   "dependencies": [
@@ -12,5 +12,11 @@
       "name": "vcpkg-cmake-config",
       "host": true
     }
-  ]
+  ],
+  "default-features": [],
+  "features": {
+    "win7": {
+      "description": "Build with windows 7 support"
+    }
+  }
 }

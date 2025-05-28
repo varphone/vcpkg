@@ -28,7 +28,16 @@
 #   VCPKG_TARGET_SHARED_LIBRARY_SUFFIX
 #
 # 	See additional helpful variables in /docs/maintainers/vcpkg_common_definitions.md
+set(VCPKG_KEEP_ENV_VARS "ACCESS_TOKEN")
 
+# Find Git binary path
+find_program(GIT git REQUIRED)
+if(NOT GIT)
+    message(FATAL_ERROR "Git not found. Please install Git and add it to your PATH.")
+else()
+    get_filename_component(GIT_BIN_DIR "${GIT}" DIRECTORY)
+    vcpkg_add_to_path("${GIT_BIN_DIR}")
+endif()
 
 # Find Rust Cargo binary path
 if(WIN32)
@@ -36,8 +45,12 @@ if(WIN32)
 else()
     find_program(CARGO cargo HINTS "$ENV{HOME}/.cargo/bin")
 endif()
-get_filename_component(CARGO_BIN_DIR "${CARGO}" DIRECTORY)
-vcpkg_add_to_path("${CARGO_BIN_DIR}")
+if(NOT CARGO)
+    message(FATAL_ERROR "Cargo not found. Please install Rust and add it to your PATH.")
+else()
+    get_filename_component(CARGO_BIN_DIR "${CARGO}" DIRECTORY)
+    vcpkg_add_to_path("${CARGO_BIN_DIR}")
+endif()
 
 # Also consider vcpkg_from_* functions if you can; the generated code here is for any web accessable
 # source archive.
@@ -46,9 +59,9 @@ vcpkg_add_to_path("${CARGO_BIN_DIR}")
 #  vcpkg_from_bitbucket
 #  vcpkg_from_sourceforge
 vcpkg_download_distfile(ARCHIVE
-    URLS "http://git.full-v.com/fullv/xtr/archive/v1.1.5-p1.zip"
-    FILENAME "xtr-1.1.5-p1.zip"
-    SHA512 7fe807387b335078539dbe9b4b5463c2b5fbf4f9d1218c7ea2e5a5a5b69695ce2996efde75f7f77e53dbe8ce555e0e146e16e824fcc1909dc1c6f4f8d34957f8
+    URLS "http://git.full-v.com/fullv/xtr/archive/v1.1.6+4.zip"
+    FILENAME "xtr-1.1.6+4.zip"
+    SHA512 79d8454612595271bddd69ae9f2ad8a9edffbfaa8c685121b1af84d3442c16dd44353fccc59ce1d0924d14581590665b884af6eee1abdaa5c626ce4420a493f9
 )
 
 vcpkg_extract_source_archive_ex(
@@ -65,20 +78,15 @@ vcpkg_extract_source_archive_ex(
 
 # # Check if one or more features are a part of a package installation.
 # # See /docs/maintainers/vcpkg_check_features.md for more details
-# vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
-#   FEATURES # <- Keyword FEATURES is required because INVERTED_FEATURES are being used
-#     tbb   WITH_TBB
-#   INVERTED_FEATURES
-#     tbb   ROCKSDB_IGNORE_PACKAGE_TBB
-# )
-
-# file(COPY "${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt" DESTINATION "${SOURCE_PATH}")
+vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+  FEATURES # <- Keyword FEATURES is required because INVERTED_FEATURES are being used
+    win7   WITH_WIN7_COMPAT
+)
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
-    # OPTIONS -DUSE_THIS_IN_ALL_BUILDS=1 -DUSE_THIS_TOO=2
-    # OPTIONS_RELEASE -DOPTIMIZE=1
-    # OPTIONS_DEBUG -DDEBUGGABLE=1
+    OPTIONS
+        ${FEATURE_OPTIONS}
 )
 
 vcpkg_cmake_install()
@@ -91,15 +99,6 @@ vcpkg_cmake_install()
 #    "host": true
 #}
 vcpkg_cmake_config_fixup()
-
-# if(VCPKG_TARGET_IS_WINDOWS)
-#     if(NOT VCPKG_BUILD_TYPE)
-#         file(COPY "${CURRENT_PACKAGES_DIR}/lib/pkgconfig/xtr.pc" DESTINATION "${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig")
-#     endif()
-#     vcpkg_fixup_pkgconfig()
-# else()
-#     set(VCPKG_POLICY_EMPTY_PACKAGE enabled)
-# endif()
 
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 
