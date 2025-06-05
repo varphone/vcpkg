@@ -1,6 +1,6 @@
 {
   "name": "fvia",
-  "version": "0.5.0",
+  "version": "0.5.0+2",
   "homepage": "http://git.full-v.com/fullv/fv-ia-rs",
   "description": "Full-V industry application framework",
   "dependencies": [
