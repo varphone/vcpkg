@@ -46,9 +46,9 @@ vcpkg_add_to_path("${CARGO_BIN_DIR}")
 #  vcpkg_from_bitbucket
 #  vcpkg_from_sourceforge
 vcpkg_download_distfile(ARCHIVE
-    URLS "http://git.full-v.com/fullv/fv-ia-rs/archive/v0.5.0.zip"
-    FILENAME "fv-ia-0.5.0.zip"
-    SHA512 53cb792a0bb1159206346feb172219eb637536dfa2fa140b21200fae3b4fcba19e17afc843244745a98d568294ea8ba9f98f5845fe8ff1eafb831202c560147d
+    URLS "http://git.full-v.com/fullv/fv-ia-rs/archive/v0.5.0+2.zip"
+    FILENAME "fv-ia-0.5.0+2.zip"
+    SHA512 b4a93c3f7a8630f74de05ea9ffa1954487a6e74519099471a4a16b330c33219b49e26aced1ab2a58ac5d1dafedebbf00bfa536fe240e6df492fae52cdc0e2c2f
 )
 
 vcpkg_extract_source_archive_ex(
