@@ -470,7 +470,20 @@
       ]
     },
     "lite": {
-      "description": "Build with few components"
+      "description": "Build with few components",
+      "dependencies": [
+        {
+          "name": "ffmpeg",
+          "default-features": true,
+          "features": [
+            "qsv",
+            "webp",
+            "x264",
+            "x265",
+            "zlib"
+          ]
+        }
+      ]
     },
     "lzma": {
       "description": "lzma support",
