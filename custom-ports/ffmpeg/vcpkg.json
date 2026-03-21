@@ -479,12 +479,27 @@
           "name": "ffmpeg",
           "default-features": true,
           "features": [
-            "qsv",
             "webp",
             "x264",
             "x265",
             "zlib"
           ]
+        },
+        {
+          "name": "ffmpeg",
+          "default-features": true,
+          "features": [
+            "qsv"
+          ],
+          "platform": "windows"
+        },
+        {
+          "name": "ffmpeg",
+          "default-features": true,
+          "features": [
+            "vaapi"
+          ],
+          "platform": "linux"
         }
       ]
     },
