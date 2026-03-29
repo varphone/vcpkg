@@ -499,7 +499,7 @@
           "features": [
             "vaapi"
           ],
-          "platform": "linux"
+          "platform": "linux & !static"
         }
       ]
     },
